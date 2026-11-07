@@ -33,3 +33,6 @@ GitHub Pages dùng `https` nên trình duyệt cho phép bật camera. Máy cầ
 ## Chỉnh sửa
 - Câu hỏi mẫu: biến `SAMPLE` trong `index.html`
 - Thời gian giữ tay: biến `HOLD` (mili giây)
+
+## Âm thanh
+Không dùng giọng đọc. Trả lời đúng phát tiếng "Ting Ting", trả lời sai (hoặc giơ 5 ngón) phát tiếng "è è". Âm thanh được tạo bằng Web Audio nên không cần file âm thanh nào.
