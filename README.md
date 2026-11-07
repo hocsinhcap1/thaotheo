@@ -34,5 +34,10 @@ GitHub Pages dùng `https` nên trình duyệt cho phép bật camera. Máy cầ
 - Câu hỏi mẫu: biến `SAMPLE` trong `index.html`
 - Thời gian giữ tay: biến `HOLD` (mili giây)
 
-## Âm thanh
-Không dùng giọng đọc. Trả lời đúng phát tiếng "Ting Ting", trả lời sai (hoặc giơ 5 ngón) phát tiếng "è è". Âm thanh được tạo bằng Web Audio nên không cần file âm thanh nào.
+## Giọng đọc
+Trò chơi dùng giọng đọc của trình duyệt (nâng cao độ cho giống giọng trẻ em). Trình duyệt chỉ có giọng tiếng Việt chuẩn, không có giọng miền Nam. Muốn có giọng bé miền Nam thật, hãy thu âm và đặt 3 file vào thư mục `audio/` cạnh `index.html`:
+- `dung.mp3`: câu khen khi trả lời đúng (ví dụ "Giỏi quá trời luôn, đúng rồi nè!")
+- `sai.mp3`: câu động viên khi trả lời sai (ví dụ "Chưa đúng rồi, cố lên nha!")
+- `khongphuhop.mp3`: câu khi giơ 5 ngón ("Không phù hợp, mời chọn lại đáp án")
+
+Có file thì trò chơi phát file, không có thì tự dùng giọng máy.

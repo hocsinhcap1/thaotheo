@@ -189,7 +189,7 @@ function choose(k){
   if(ok)score++;
   $('score').textContent='⭐ '+score;
   $('fb').textContent=ok?'🎉 Giỏi quá! Đúng rồi!':'💪 Chưa đúng, đáp án là '+LET[q.c]+'. Cố lên!';
-  sfx(ok?'ok':'no');
+  ok?speak('Giỏi quá trời luôn, đúng rồi nè!','dung'):speak('Chưa đúng rồi, cố lên nha!','sai');
   nt=setTimeout(next,2600);
 }
 function next(){
@@ -200,17 +200,16 @@ function next(){
     $('endText').textContent='Bạn trả lời đúng '+score+'/'+qs.length+' câu.';
     $('end').classList.add('on');}
 }
-/* Âm thanh báo đúng / sai (tạo bằng Web Audio, không cần file) */
-let ac=null;
-function getAc(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended')ac.resume()}catch(e){}return ac}
-document.addEventListener('pointerdown',getAc,{once:true});
-function tone(f,t0,d,type,vol,fEnd){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.setValueAtTime(f,t0);
-  if(fEnd)o.frequency.exponentialRampToValueAtTime(fEnd,t0+d);
-  g.gain.setValueAtTime(vol,t0);g.gain.exponentialRampToValueAtTime(0.001,t0+d);o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+d)}
-function sfx(kind){try{if(!getAc())return;const t=ac.currentTime;
-  if(kind==='ok'){[[1760,0],[2349,0.24]].forEach(([f,d])=>{tone(f,t+d,0.55,'sine',.35);tone(f*2,t+d,0.3,'sine',.1)})}   // Ting Ting
-  else{[0,0.3].forEach(d=>tone(150,t+d,0.26,'sawtooth',.22,105))}                                                         // è è
-}catch(e){}}
+/* Giọng đọc: ưu tiên file ghi âm audio/<tên>.mp3 (giọng bé miền Nam), nếu chưa có thì dùng giọng máy đọc, nâng cao độ cho giống giọng trẻ em */
+let viVoice=null;
+function pickVoice(){try{const v=speechSynthesis.getVoices().filter(x=>/^vi/i.test(x.lang));
+  viVoice=v.find(x=>/HoaiMy|Hoai My|Linh/i.test(x.name))||v.find(x=>x.localService)||v[0]||null}catch(e){}}
+try{speechSynthesis.onvoiceschanged=pickVoice;pickVoice()}catch(e){}
+function tts(t){try{const u=new SpeechSynthesisUtterance(t);u.lang='vi-VN';if(viVoice)u.voice=viVoice;u.pitch=1.8;u.rate=1.05;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function speak(t,key){
+  if(!key)return tts(t);
+  const a=new Audio('audio/'+key+'.mp3');a.onerror=()=>tts(t);a.play().catch(()=>{});
+}
 
 /* ---------- Giữ tay để chọn ---------- */
 let cur=0, since=0;
@@ -227,7 +226,7 @@ function onFingers(n){
     $('badge').textContent='🖐️ 5 ngón: không hợp lệ';
     if(!badSince)badSince=now;
     if(now-badSince>700&&now-lastWarn>4000){
-      lastWarn=now;$('fb').textContent='🚫 '+WARN;sfx('no');
+      lastWarn=now;$('fb').textContent='🚫 '+WARN;speak(WARN,'khongphuhop');
     }
     return;
   }
